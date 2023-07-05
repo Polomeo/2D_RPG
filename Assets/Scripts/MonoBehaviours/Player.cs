@@ -7,17 +7,24 @@ public class Player : Character
     public HealthBar healthBarPrefab;
     HealthBar healthBar;
 
+    public Inventory inventoryPrefab;
+    Inventory inventory;
+
     private void Start()
     {  
-        // seteamos los Hitpoints iniciales (heredados de Character)
+        // ----- HEALTHBAR -----
+
+        // Seteamos los Hitpoints iniciales (heredados de Character)
         hitPoints.value = startingHitPoints;
 
-        // creamos la healthbar
+        // Creamos la barra de vida y la guardamos en la variable healthBar
         healthBar = Instantiate(healthBarPrefab);
 
         // Con esto conectamos el script de HealthBar al Player
         healthBar.character = this;
 
+        // ----- INVENTORY -----
+        inventory = Instantiate(inventoryPrefab);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -38,12 +45,14 @@ public class Player : Character
                 switch (hitObject.itemType)
                 {
                     case Item.ItemType.COIN:
-                        shouldDisappear = true;
+                        // Chequeamos si lo podemos añadir al inventario
+                        // y si es True, le decimos que desaparezca
+                        shouldDisappear = inventory.AddItem(hitObject);
                         break;
 
                     case Item.ItemType.HEALTH:
-                        AdjustHitPoints(hitObject.quantity);
-                        shouldDisappear = true;
+                        // Si puede ajustar la vida, devuelve True
+                        shouldDisappear = AdjustHitPoints(hitObject.quantity); ;
                         break;
                     
                     default: 
