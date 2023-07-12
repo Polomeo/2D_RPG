@@ -7,19 +7,21 @@ public class RPGGameManager : MonoBehaviour
 {
     public SpawnPoint playerSpawnPoint;
 
+    public RPGCameraManager cameraManager;
+
     // STATIC - Queda hecha cualquier modificación que le haga cualquier script externo
-    public static RPGGameManager instance = null;
+    public static RPGGameManager Instance = null;
 
     // SINGLETON - Nos aseguramos que haya UNA sola instancia
     private void Awake()
     {
-        if (instance != null && instance != this)
+        if (Instance != null && Instance != this)
         {
             Destroy(gameObject);
         }
         else
         {
-            instance = this;
+            Instance = this;
         }
     }
 
@@ -38,7 +40,11 @@ public class RPGGameManager : MonoBehaviour
     {
         if (playerSpawnPoint != null)
         {
+            // Spawn el Player
             GameObject player = playerSpawnPoint.SpawnObject();
+
+            // Lo ponemos como objetivo de Follow de la VirtualCamera
+            cameraManager.virtualCamera.Follow = player.transform;
         }
     }
 }
