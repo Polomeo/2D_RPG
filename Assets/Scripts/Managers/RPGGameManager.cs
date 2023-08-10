@@ -6,10 +6,11 @@ using UnityEngine;
 public class RPGGameManager : MonoBehaviour
 {
     public SpawnPoint playerSpawnPoint;
-
+    
+    // ====== MANAGERS ======
     public RPGCameraManager cameraManager;
 
-    // STATIC - Queda hecha cualquier modificación que le haga cualquier script externo
+    // STATIC - Cualquier modificación se aplica a todas las instancias
     public static RPGGameManager Instance = null;
 
     // SINGLETON - Nos aseguramos que haya UNA sola instancia

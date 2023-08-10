@@ -1,30 +1,26 @@
+using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Player : Character
 {
+    public HitPoints hitPoints;
+
     public HealthBar healthBarPrefab;
     HealthBar healthBar;
 
     public Inventory inventoryPrefab;
     Inventory inventory;
 
+    private void OnEnable()
+    {
+        ResetCharacter();
+    }
+
     private void Start()
     {  
-        // ----- HEALTHBAR -----
-
-        // Seteamos los Hitpoints iniciales (heredados de Character)
-        hitPoints.value = startingHitPoints;
-
-        // Creamos la barra de vida y la guardamos en la variable healthBar
-        healthBar = Instantiate(healthBarPrefab);
-
-        // Con esto conectamos el script de HealthBar al Player
-        healthBar.character = this;
-
-        // ----- INVENTORY -----
-        inventory = Instantiate(inventoryPrefab);
+           
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -80,5 +76,51 @@ public class Player : Character
             return true;
         }
         return false;
+    }
+
+    public override IEnumerator DamageCharacter(int damage, float interval)
+    {
+        while (true)
+        {
+            hitPoints.value = hitPoints.value - damage;
+            Debug.Log("Player got hit!");
+
+            if (hitPoints.value <= float.Epsilon)
+            {
+                KillCharacter();
+                break;
+            }
+
+            if (interval > float.Epsilon)
+            {
+                yield return new WaitForSeconds(interval);
+            }
+            else 
+            { 
+                break; 
+            }
+        }
+    }
+    public override void KillCharacter()
+    {
+        base.KillCharacter();
+
+        Destroy(healthBar.gameObject);
+        Destroy(inventory.gameObject);
+    }
+
+    public override void ResetCharacter()
+    {
+        // Creamos el inventario
+        inventory = Instantiate(inventoryPrefab);
+
+        // Creamos la barra de vida y la guardamos en la variable healthBar
+        healthBar = Instantiate(healthBarPrefab);
+
+        // Con esto conectamos el script de HealthBar al Player
+        healthBar.character = this;
+
+        // Reseteamos los Hitpoints iniciales (heredados de Character)
+        hitPoints.value = startingHitPoints;
     }
 }
