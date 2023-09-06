@@ -19,10 +19,19 @@ public class Arc : MonoBehaviour
             // para que de un número entre 0 y 1 (0% - 100%)
             percentComplete += Time.deltaTime / duration;
 
+            // La función Seno completa un ciclo en 2pi
+            // A porcentaje = 0 empieza en el eje de coord.
+            // A porcentaje = 0.5 es 1/2pi, por lo que está en el tope de la cresta
+            // A porcentaje = 1 es 1pi, por lo que vuelve a X = 0
+            var currentHeight = Mathf.Sin(Mathf.PI * percentComplete);
+
             // Se usa la Interpolación lineal (LERP)
             // para ir actualizando la posición relativamente al porcentaje
             // y usando curve.Evaluate para el efecto smooth
-            transform.position = Vector3.Lerp(startPosition, destination, curve.Evaluate(percentComplete));
+            // (evalúa la curva en la distancia recorrida en el porcentaje declarado)
+            // Le sumamos un Vector3.up * la altura basada en la curva Seno
+            transform.position = Vector3.Lerp(startPosition, destination, curve.Evaluate(percentComplete)) + Vector3.up * currentHeight;
+
 
             // Espera hasta el próximo frame
             yield return null;
