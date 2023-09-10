@@ -84,6 +84,8 @@ public class Player : Character
         {
             hitPoints.value = hitPoints.value - damage;
             Debug.Log("Player got hit!");
+            StartCoroutine(FlickerCharacter());
+
 
             if (hitPoints.value <= float.Epsilon)
             {

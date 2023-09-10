@@ -15,9 +15,10 @@ public class Enemy : Character
         while (true)
         {
             hitPoints = hitPoints - damage;
+            StartCoroutine(FlickerCharacter());
 
             // float.Epison --> float más pequeño > 0
-            if(hitPoints <= float.Epsilon)
+            if (hitPoints <= float.Epsilon)
             {
                 KillCharacter();
                 break; // Sale del bucle While

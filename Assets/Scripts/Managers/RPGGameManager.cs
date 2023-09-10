@@ -31,6 +31,15 @@ public class RPGGameManager : MonoBehaviour
         SetupScene();
     }
 
+    private void Update()
+    {
+        // Salir del juego con Escape
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Application.Quit();
+        }
+    }
+
     public void SetupScene()
     {
         // PLAYER SPAWN
